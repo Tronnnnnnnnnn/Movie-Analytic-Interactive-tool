@@ -1,0 +1,106 @@
+name: Streamlit App Testing & Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pylint flake8 black
+    
+    - name: Lint with flake8
+      run: |
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      continue-on-error: true
+    
+    - name: Check code format with black
+      run: |
+        black --check . || echo "Code formatting issues found. Run 'black .' to fix."
+      continue-on-error: true
+    
+    - name: Syntax validation
+      run: |
+        python -m py_compile "Movie Analytic Interactive Tool.py"
+    
+    - name: Test imports
+      run: |
+        python -c "import pandas; import streamlit; import matplotlib; import seaborn; print('✅ All imports successful')"
+    
+    - name: Generate app cache
+      run: |
+        streamlit run "Movie Analytic Interactive Tool.py" --logger.level=error &
+        sleep 10
+        pkill -f streamlit
+      continue-on-error: true
+
+  code-quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pylint
+    
+    - name: Analyze code with pylint
+      run: |
+        pylint "Movie Analytic Interactive Tool.py" --disable=all --enable=syntax-error,undefined-variable || true
+      continue-on-error: true
+
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install security tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit safety
+    
+    - name: Run Bandit security scan
+      run: |
+        bandit -r . -f json -o bandit-report.json || true
+        echo "Security scan completed"
+      continue-on-error: true
+    
+    - name: Check dependencies for vulnerabilities
+      run: |
+        safety check --json || true
+      continue-on-error: true
