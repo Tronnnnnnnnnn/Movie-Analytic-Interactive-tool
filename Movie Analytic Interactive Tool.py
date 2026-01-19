@@ -128,6 +128,65 @@ if display_cols:
 else:
     st.info("No displayable columns found in the filtered data.")
 
+st.divider()
+
+# Movies segmented by Star Rating
+st.subheader("⭐ Movies Segmented by Star Rating")
+if 'IMDB_Rating' in filtered_df.columns:
+    # Define star categories
+    def categorize_stars(rating):
+        if rating >= 9:
+            return "⭐⭐⭐⭐⭐ Masterpiece (9.0-10.0)"
+        elif rating >= 8:
+            return "⭐⭐⭐⭐ Excellent (8.0-8.9)"
+        elif rating >= 7:
+            return "⭐⭐⭐ Great (7.0-7.9)"
+        elif rating >= 6:
+            return "⭐⭐ Good (6.0-6.9)"
+        else:
+            return "⭐ Average (0-5.9)"
+    
+    filtered_df['Star_Category'] = filtered_df['IMDB_Rating'].apply(categorize_stars)
+    
+    # Display star category statistics
+    star_stats = filtered_df['Star_Category'].value_counts().sort_index(ascending=False)
+    col1, col2, col3, col4, col5 = st.columns(5)
+    
+    categories = ["⭐⭐⭐⭐⭐ Masterpiece (9.0-10.0)", "⭐⭐⭐⭐ Excellent (8.0-8.9)", 
+                  "⭐⭐⭐ Great (7.0-7.9)", "⭐⭐ Good (6.0-6.9)", "⭐ Average (0-5.9)"]
+    
+    with col1:
+        count = (filtered_df['Star_Category'] == categories[0]).sum()
+        st.metric("🏆 Masterpiece", count)
+    with col2:
+        count = (filtered_df['Star_Category'] == categories[1]).sum()
+        st.metric("✨ Excellent", count)
+    with col3:
+        count = (filtered_df['Star_Category'] == categories[2]).sum()
+        st.metric("👍 Great", count)
+    with col4:
+        count = (filtered_df['Star_Category'] == categories[3]).sum()
+        st.metric("👌 Good", count)
+    with col5:
+        count = (filtered_df['Star_Category'] == categories[4]).sum()
+        st.metric("📽️ Average", count)
+    
+    st.divider()
+    
+    # Display movies for each star category
+    for category in ["⭐⭐⭐⭐⭐ Masterpiece (9.0-10.0)", "⭐⭐⭐⭐ Excellent (8.0-8.9)", 
+                     "⭐⭐⭐ Great (7.0-7.9)", "⭐⭐ Good (6.0-6.9)", "⭐ Average (0-5.9)"]:
+        category_df = filtered_df[filtered_df['Star_Category'] == category].sort_values('IMDB_Rating', ascending=False)
+        
+        if len(category_df) > 0:
+            st.write(f"**{category}** - {len(category_df)} movies")
+            display_cols_stars = [c for c in ('Series_Title', 'Genre', 'Released_Year', 'IMDB_Rating', 'Gross') if c in category_df.columns]
+            if display_cols_stars:
+                st.dataframe(category_df[display_cols_stars], use_container_width=True, height=150, hide_index=True)
+            st.write("")
+else:
+    st.info("IMDB_Rating column not found in the dataset.")
+
 # Visualizations
 st.subheader("Top 10 Genres by Movie Count")
 if 'Genre' in df.columns:
