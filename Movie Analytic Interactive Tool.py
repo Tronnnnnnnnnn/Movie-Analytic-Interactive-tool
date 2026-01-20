@@ -21,9 +21,9 @@ if plotting_available:
     sns.set(style="whitegrid")
 
 # Custom page config for better UI
-st.set_page_config(page_title="Movie Analytics", page_icon="🎬", layout="wide")
+st.set_page_config(page_title="Movie Analyst", page_icon="🎬", layout="wide")
 
-st.title("🎬 Movie Analytics Interactive Dashboard")
+st.title("Welcome to Movie Analyst")
 
 # Load dataset
 @st.cache_data
