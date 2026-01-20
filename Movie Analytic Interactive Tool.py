@@ -124,11 +124,15 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.metric("🎥 Total Movies", len(filtered_df))
 with col2:
-    total_gross = filtered_df['Gross'].sum() if 'Gross' in filtered_df.columns else 0
-    st.metric("💰 Total Gross", f"${total_gross:,.0f}" if total_gross > 0 else "N/A")
-with col3:
     genre_count = filtered_df['Genre'].nunique() if 'Genre' in filtered_df.columns else 0
     st.metric("🎭 Genres", genre_count)
+with col3:
+    if 'Gross' in filtered_df.columns and len(filtered_df) > 0:
+        highest_gross_idx = filtered_df['Gross'].idxmax()
+        highest_movie = filtered_df.loc[highest_gross_idx, 'Series_Title']
+        st.metric("🏆 Highest Grossing Film", highest_movie)
+    else:
+        st.metric("🏆 Highest Grossing Film", "N/A")
 
 st.divider()
 
