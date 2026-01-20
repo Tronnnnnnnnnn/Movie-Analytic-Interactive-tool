@@ -90,6 +90,9 @@ else:
 # search by title
 search_title = st.sidebar.text_input("🔍 Search by Title (partial match)", placeholder="e.g., Godfather")
 
+# search by actor name
+search_actor = st.sidebar.text_input("🎭 Search by Lead Actor (partial match)", placeholder="e.g., Tom Hanks")
+
 # Filter data based on user input
 if selected_genre == 'All':
     filtered_df = df.copy()
@@ -102,6 +105,18 @@ if selected_year and selected_year[0] is not None:
 # apply title search filter
 if search_title and 'Series_Title' in filtered_df.columns:
     filtered_df = filtered_df[filtered_df['Series_Title'].str.contains(search_title, case=False, na=False)]
+
+# apply actor search filter (check for common actor column names)
+if search_actor:
+    actor_columns = [col for col in filtered_df.columns if 'actor' in col.lower() or 'star' in col.lower()]
+    if actor_columns:
+        # Search across all actor-related columns
+        actor_mask = pd.Series([False] * len(filtered_df), index=filtered_df.index)
+        for col in actor_columns:
+            actor_mask |= filtered_df[col].astype(str).str.contains(search_actor, case=False, na=False)
+        filtered_df = filtered_df[actor_mask]
+    else:
+        st.sidebar.warning("No actor/star column found in dataset")
 st.write(f"### Displaying {len(filtered_df)} movies")
 
 # Display key metrics
