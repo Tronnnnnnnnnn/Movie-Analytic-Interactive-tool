@@ -23,7 +23,7 @@ if plotting_available:
 # Custom page config for better UI
 st.set_page_config(page_title="Movie Analyst", page_icon="🎬", layout="wide")
 
-st.title("Welcome to Movie Analyst")
+st.title("Welcome to Movie Analyst!")
 
 # Load dataset
 @st.cache_data
