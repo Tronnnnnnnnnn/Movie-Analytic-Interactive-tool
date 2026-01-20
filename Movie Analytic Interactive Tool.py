@@ -85,6 +85,63 @@ if df.empty:
 
 # streamlit sidebar for user inputs
 st.sidebar.header("🎯 Filter Movies")
+
+# Theme selector
+theme = st.sidebar.radio("🌓 Choose Theme", options=["🌙 Dark Mode", "☀️ Light Mode"], index=1)
+
+# Apply theme CSS
+if theme == "🌙 Dark Mode":
+    st.markdown("""
+    <style>
+    /* Dark Mode Styling */
+    :root {
+        --background-color: #1a1a1a;
+        --text-color: #e0e0e0;
+        --card-background: #2d2d2d;
+        --border-color: #404040;
+    }
+    body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+    .stMetric {
+        background-color: #2d2d2d;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #404040;
+    }
+    .stDataFrame {
+        background-color: #2d2d2d !important;
+        color: #e0e0e0 !important;
+    }
+    div[data-testid="stTabs"] {
+        background-color: #2d2d2d;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("""
+    <style>
+    /* Light Mode Styling */
+    :root {
+        --background-color: #ffffff;
+        --text-color: #1a1a1a;
+        --card-background: #f5f5f5;
+        --border-color: #e0e0e0;
+    }
+    body {
+        background-color: #ffffff;
+        color: #1a1a1a;
+    }
+    .stMetric {
+        background-color: #f5f5f5;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 selected_genre = st.sidebar.selectbox("🎭 Select Genre", options=['All'] + list(df['Genre'].unique()) if 'Genre' in df.columns else ['All'])
 
 # compute year bounds once and reuse
