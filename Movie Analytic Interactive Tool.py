@@ -132,178 +132,190 @@ with col3:
 
 st.divider()
 
-# Display filtered data
-st.subheader(f"📊 Filtered Movie Data ({len(filtered_df)} records)")
-display_cols = [c for c in ('Series_Title', 'Genre', 'Released_Year', 'IMDB_Rating', 'Gross') if c in filtered_df.columns]
-if display_cols:
-    st.dataframe(filtered_df[display_cols], use_container_width=True, height=300)
-else:
-    st.info("No displayable columns found in the filtered data.")
+# Create tabs for different views
+tab1, tab2, tab3, tab4 = st.tabs(["📊 Movie Data", "🎬 Movie Details", "⭐ By Rating", "📈 Analytics"])
 
-st.divider()
+with tab1:
+    st.subheader("📊 All Movies")
+    # Display filtered data
+    display_cols = [c for c in ('Series_Title', 'Genre', 'Released_Year', 'IMDB_Rating', 'Gross') if c in filtered_df.columns]
+    if display_cols:
+        st.dataframe(filtered_df[display_cols], use_container_width=True, height=400)
+    else:
+        st.info("No displayable columns found in the filtered data.")
 
-# Movie Details Section - Individual Movie Pages
-st.subheader("🎬 Movie Details & Summaries")
-if len(filtered_df) > 0:
-    # Select a movie to view details
-    movie_titles = filtered_df['Series_Title'].tolist()
-    selected_movie = st.selectbox("📽️ Select a Movie to View Details", options=movie_titles, key="movie_selector")
-    
-    # Get the selected movie data
-    movie_data = filtered_df[filtered_df['Series_Title'] == selected_movie].iloc[0]
-    
-    # Display movie summary in a formatted card-like structure
-    st.write("---")
-    col1, col2 = st.columns([2, 1])
-    
-    with col1:
-        st.markdown(f"## {movie_data['Series_Title']}")
-        st.markdown(f"**Genre:** `{movie_data['Genre']}`")
-        st.markdown(f"**Release Year:** `{int(movie_data['Released_Year'])}`")
-    
-    with col2:
-        st.markdown(f"### ⭐ {movie_data['IMDB_Rating']}/10")
-        st.markdown(f"### 💰 ${movie_data['Gross']:,.0f}")
-    
-    # Additional movie statistics
-    st.write("---")
-    st.subheader("📊 Movie Summary")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.metric("⭐ IMDB Rating", f"{movie_data['IMDB_Rating']:.1f}/10")
-    with col2:
-        st.metric("📅 Year", int(movie_data['Released_Year']))
-    with col3:
-        st.metric("🎬 Genre", movie_data['Genre'])
-    
-    # Revenue and votes information
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.metric("💵 Box Office Gross", f"${movie_data['Gross']:,.0f}")
-    with col2:
-        st.metric("🗳️ Number of Votes", f"{int(movie_data['No_of_Votes']):,}" if 'No_of_Votes' in movie_data else "N/A")
-    
-    st.write("---")
-    st.markdown("**Quick Summary**")
-    st.info(f"'{selected_movie}' is a {movie_data['Genre']} film released in {int(movie_data['Released_Year'])} with an IMDB rating of {movie_data['IMDB_Rating']}/10. The film earned ${movie_data['Gross']:,.0f} at the box office.")
-    
-else:
-    st.warning("No movies to display. Adjust your filters to see movie details.")
+with tab2:
+    st.subheader("🎬 Movie Details & Summaries")
+    if len(filtered_df) > 0:
+        # Select a movie to view details with better styling
+        col_left, col_right = st.columns([3, 1])
+        
+        with col_left:
+            st.markdown("### 📽️ Choose a Movie")
+        
+        movie_titles = filtered_df['Series_Title'].tolist()
+        selected_movie = st.selectbox("Select a Movie to View Details", options=movie_titles, key="movie_selector", label_visibility="collapsed")
+        
+        # Get the selected movie data
+        movie_data = filtered_df[filtered_df['Series_Title'] == selected_movie].iloc[0]
+        
+        # Display movie summary in a formatted card-like structure
+        st.markdown("---")
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            st.markdown(f"## 🎬 {movie_data['Series_Title']}")
+            st.markdown(f"**🎭 Genre:** `{movie_data['Genre']}`")
+            st.markdown(f"**📅 Release Year:** `{int(movie_data['Released_Year'])}`")
+        
+        with col2:
+            st.markdown(f"<div style='text-align: center; padding: 20px; background-color: #f0f2f6; border-radius: 10px;'>", unsafe_allow_html=True)
+            st.markdown(f"### ⭐ {movie_data['IMDB_Rating']}/10")
+            st.markdown(f"### 💰 ${movie_data['Gross']:,.0f}")
+            st.markdown("</div>", unsafe_allow_html=True)
+        
+        # Additional movie statistics
+        st.markdown("---")
+        st.subheader("📊 Movie Summary")
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.metric("⭐ IMDB Rating", f"{movie_data['IMDB_Rating']:.1f}/10")
+        with col2:
+            st.metric("📅 Year", int(movie_data['Released_Year']))
+        with col3:
+            st.metric("🎬 Genre", movie_data['Genre'])
+        
+        # Revenue and votes information
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.metric("💵 Box Office Gross", f"${movie_data['Gross']:,.0f}")
+        with col2:
+            st.metric("🗳️ Number of Votes", f"{int(movie_data['No_of_Votes']):,}" if 'No_of_Votes' in movie_data else "N/A")
+        
+        st.markdown("---")
+        st.markdown("**Quick Summary**")
+        st.info(f"'{selected_movie}' is a {movie_data['Genre']} film released in {int(movie_data['Released_Year'])} with an IMDB rating of {movie_data['IMDB_Rating']}/10. The film earned ${movie_data['Gross']:,.0f} at the box office.")
+        
+    else:
+        st.warning("No movies to display. Adjust your filters to see movie details.")
 
-st.divider()
+with tab3:
+    st.subheader("⭐ Movies Segmented by Star Rating")
+    if 'IMDB_Rating' in filtered_df.columns:
+        # Define star categories
+        def categorize_stars(rating):
+            if rating >= 9:
+                return "⭐⭐⭐⭐⭐ Masterpiece (9.0-10.0)"
+            elif rating >= 8:
+                return "⭐⭐⭐⭐ Excellent (8.0-8.9)"
+            elif rating >= 7:
+                return "⭐⭐⭐ Great (7.0-7.9)"
+            elif rating >= 6:
+                return "⭐⭐ Good (6.0-6.9)"
+            else:
+                return "⭐ Average (0-5.9)"
+        
+        filtered_df['Star_Category'] = filtered_df['IMDB_Rating'].apply(categorize_stars)
+        
+        # Display star category statistics
+        star_stats = filtered_df['Star_Category'].value_counts().sort_index(ascending=False)
+        col1, col2, col3, col4, col5 = st.columns(5)
+        
+        categories = ["⭐⭐⭐⭐⭐ Masterpiece (9.0-10.0)", "⭐⭐⭐⭐ Excellent (8.0-8.9)", 
+                      "⭐⭐⭐ Great (7.0-7.9)", "⭐⭐ Good (6.0-6.9)", "⭐ Average (0-5.9)"]
+        
+        with col1:
+            count = (filtered_df['Star_Category'] == categories[0]).sum()
+            st.metric("🏆 Masterpiece", count)
+        with col2:
+            count = (filtered_df['Star_Category'] == categories[1]).sum()
+            st.metric("✨ Excellent", count)
+        with col3:
+            count = (filtered_df['Star_Category'] == categories[2]).sum()
+            st.metric("👍 Great", count)
+        with col4:
+            count = (filtered_df['Star_Category'] == categories[3]).sum()
+            st.metric("👌 Good", count)
+        with col5:
+            count = (filtered_df['Star_Category'] == categories[4]).sum()
+            st.metric("📽️ Average", count)
+        
+        st.divider()
+        
+        # Display movies for each star category
+        for category in ["⭐⭐⭐⭐⭐ Masterpiece (9.0-10.0)", "⭐⭐⭐⭐ Excellent (8.0-8.9)", 
+                         "⭐⭐⭐ Great (7.0-7.9)", "⭐⭐ Good (6.0-6.9)", "⭐ Average (0-5.9)"]:
+            category_df = filtered_df[filtered_df['Star_Category'] == category].sort_values('IMDB_Rating', ascending=False)
+            
+            if len(category_df) > 0:
+                with st.expander(f"{category} - {len(category_df)} movies"):
+                    display_cols_stars = [c for c in ('Series_Title', 'Genre', 'Released_Year', 'IMDB_Rating', 'Gross') if c in category_df.columns]
+                    if display_cols_stars:
+                        st.dataframe(category_df[display_cols_stars], use_container_width=True, hide_index=True)
+    else:
+        st.info("IMDB_Rating column not found in the dataset.")
 
-# Movies segmented by Star Rating
-st.subheader("⭐ Movies Segmented by Star Rating")
-if 'IMDB_Rating' in filtered_df.columns:
-    # Define star categories
-    def categorize_stars(rating):
-        if rating >= 9:
-            return "⭐⭐⭐⭐⭐ Masterpiece (9.0-10.0)"
-        elif rating >= 8:
-            return "⭐⭐⭐⭐ Excellent (8.0-8.9)"
-        elif rating >= 7:
-            return "⭐⭐⭐ Great (7.0-7.9)"
-        elif rating >= 6:
-            return "⭐⭐ Good (6.0-6.9)"
+with tab4:
+    st.subheader("📈 Analytics & Visualizations")
+    
+    # Visualizations
+    viz_col1, viz_col2 = st.columns(2)
+    
+    with viz_col1:
+        st.markdown("#### Top 10 Genres by Movie Count")
+        if 'Genre' in df.columns:
+            df_genre = df['Genre'].dropna().str.split('|').explode()
+            genre_counts = df_genre.value_counts().head(10)
+            st.bar_chart(genre_counts)
         else:
-            return "⭐ Average (0-5.9)"
+            st.info("No genre data available to compute top genres.")
     
-    filtered_df['Star_Category'] = filtered_df['IMDB_Rating'].apply(categorize_stars)
-    
-    # Display star category statistics
-    star_stats = filtered_df['Star_Category'].value_counts().sort_index(ascending=False)
-    col1, col2, col3, col4, col5 = st.columns(5)
-    
-    categories = ["⭐⭐⭐⭐⭐ Masterpiece (9.0-10.0)", "⭐⭐⭐⭐ Excellent (8.0-8.9)", 
-                  "⭐⭐⭐ Great (7.0-7.9)", "⭐⭐ Good (6.0-6.9)", "⭐ Average (0-5.9)"]
-    
-    with col1:
-        count = (filtered_df['Star_Category'] == categories[0]).sum()
-        st.metric("🏆 Masterpiece", count)
-    with col2:
-        count = (filtered_df['Star_Category'] == categories[1]).sum()
-        st.metric("✨ Excellent", count)
-    with col3:
-        count = (filtered_df['Star_Category'] == categories[2]).sum()
-        st.metric("👍 Great", count)
-    with col4:
-        count = (filtered_df['Star_Category'] == categories[3]).sum()
-        st.metric("👌 Good", count)
-    with col5:
-        count = (filtered_df['Star_Category'] == categories[4]).sum()
-        st.metric("📽️ Average", count)
+    with viz_col2:
+        st.markdown("#### Top 10 Movies by Revenue")
+        if 'Gross' in filtered_df.columns and 'Series_Title' in filtered_df.columns:
+            top_movies = filtered_df[['Series_Title', 'Gross', 'IMDB_Rating']].sort_values(by='Gross', ascending=False).head(10)
+            st.dataframe(top_movies, use_container_width=True, hide_index=True)
+        else:
+            st.info("'Series_Title' or 'Gross' column missing; cannot show top movies by revenue.")
     
     st.divider()
     
-    # Display movies for each star category
-    for category in ["⭐⭐⭐⭐⭐ Masterpiece (9.0-10.0)", "⭐⭐⭐⭐ Excellent (8.0-8.9)", 
-                     "⭐⭐⭐ Great (7.0-7.9)", "⭐⭐ Good (6.0-6.9)", "⭐ Average (0-5.9)"]:
-        category_df = filtered_df[filtered_df['Star_Category'] == category].sort_values('IMDB_Rating', ascending=False)
-        
-        if len(category_df) > 0:
-            st.write(f"**{category}** - {len(category_df)} movies")
-            display_cols_stars = [c for c in ('Series_Title', 'Genre', 'Released_Year', 'IMDB_Rating', 'Gross') if c in category_df.columns]
-            if display_cols_stars:
-                st.dataframe(category_df[display_cols_stars], use_container_width=True, height=150, hide_index=True)
-            st.write("")
-else:
-    st.info("IMDB_Rating column not found in the dataset.")
+    # scatter plot for rating vs revenue
+    st.markdown("#### Rating vs Revenue Scatter Plot")
+    if plotting_available and {'IMDB_Rating', 'Gross'}.issubset(filtered_df.columns):
+        try:
+            fig, ax = plt.subplots(figsize=(10, 6))
+            hue = 'Genre' if 'Genre' in filtered_df.columns else None
+            sns.scatterplot(data=filtered_df, x='IMDB_Rating', y='Gross', hue=hue, palette='tab10', ax=ax, s=100)
+            ax.set_xlabel("IMDB Rating", fontsize=12, fontweight='bold')
+            ax.set_ylabel("Gross Revenue", fontsize=12, fontweight='bold')
+            ax.set_title("Rating vs Revenue", fontsize=14, fontweight='bold')
+            st.pyplot(fig, use_container_width=True)
+        except Exception as e:
+            st.error(f"Failed to render scatter plot: {e}")
+    else:
+        st.info("Scatter plot requires numeric 'IMDB_Rating' and 'Gross' columns and matplotlib/seaborn installed.")
 
-# Visualizations
-st.subheader("Top 10 Genres by Movie Count")
-if 'Genre' in df.columns:
-    df_genre = df['Genre'].dropna().str.split('|').explode()
-    genre_counts = df_genre.value_counts().head(10)
-    st.bar_chart(genre_counts)
-else:
-    st.info("No genre data available to compute top genres.")
+    st.divider()
 
-# scatter plot for rating vs revenue
-st.subheader("Rating vs Revenue Scatter")
-if plotting_available and {'IMDB_Rating', 'Gross'}.issubset(filtered_df.columns):
-    try:
-        fig, ax = plt.subplots(figsize=(10, 6))
-        hue = 'Genre' if 'Genre' in filtered_df.columns else None
-        sns.scatterplot(data=filtered_df, x='IMDB_Rating', y='Gross', hue=hue, palette='tab10', ax=ax, s=100)
-        ax.set_xlabel("IMDB Rating", fontsize=12, fontweight='bold')
-        ax.set_ylabel("Gross Revenue", fontsize=12, fontweight='bold')
-        ax.set_title("Rating vs Revenue", fontsize=14, fontweight='bold')
-        st.pyplot(fig, use_container_width=True)
-    except Exception as e:
-        st.error(f"Failed to render scatter plot: {e}")
-else:
-    st.info("Scatter plot requires numeric 'IMDB_Rating' and 'Gross' columns and matplotlib/seaborn installed.")
-
-st.divider()
-
-#Correlation heatmap
-st.subheader("Correlation Heatmap")
-if plotting_available:
-    try:
-        numeric = filtered_df.select_dtypes(include=['number'])
-        corr = numeric.corr()
-        if corr.shape[0] < 2:
-            st.info("Not enough numeric data to compute correlations.")
-        else:
-            fig2, ax = plt.subplots(figsize=(8, 6))
-            sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax, cbar_kws={'label': 'Correlation'})
-            ax.set_title("Feature Correlations", fontsize=14, fontweight='bold')
-            st.pyplot(fig2, use_container_width=True)
-    except Exception as e:
-        st.error(f"Failed to render heatmap: {e}")
-else:
-    st.warning("matplotlib/seaborn not available. Install with: pip install matplotlib seaborn")
-
-st.divider()
-
-# top 10 movies by revenue
-st.subheader("🏆 Top 10 Movies by Revenue")
-if 'Gross' in filtered_df.columns and 'Series_Title' in filtered_df.columns:
-    top_movies = filtered_df[['Series_Title', 'Gross', 'IMDB_Rating']].sort_values(by='Gross', ascending=False).head(10)
-    st.dataframe(top_movies, use_container_width=True, hide_index=True)
-else:
-    st.info("'Series_Title' or 'Gross' column missing; cannot show top movies by revenue.")
+    # Correlation heatmap
+    st.markdown("#### Correlation Heatmap")
+    if plotting_available:
+        try:
+            numeric = filtered_df.select_dtypes(include=['number'])
+            corr = numeric.corr()
+            if corr.shape[0] < 2:
+                st.info("Not enough numeric data to compute correlations.")
+            else:
+                fig2, ax = plt.subplots(figsize=(8, 6))
+                sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax, cbar_kws={'label': 'Correlation'})
+                ax.set_title("Feature Correlations", fontsize=14, fontweight='bold')
+                st.pyplot(fig2, use_container_width=True)
+        except Exception as e:
+            st.error(f"Failed to render heatmap: {e}")
+    else:
+        st.warning("matplotlib/seaborn not available. Install with: pip install matplotlib seaborn")
 
