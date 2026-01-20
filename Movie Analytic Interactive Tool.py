@@ -105,16 +105,13 @@ if search_title and 'Series_Title' in filtered_df.columns:
 st.write(f"### Displaying {len(filtered_df)} movies")
 
 # Display key metrics
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3 = st.columns(3)
 with col1:
     st.metric("🎥 Total Movies", len(filtered_df))
 with col2:
-    avg_rating = filtered_df['IMDB_Rating'].mean() if 'IMDB_Rating' in filtered_df.columns else 0
-    st.metric("⭐ Avg Rating", f"{avg_rating:.2f}" if avg_rating > 0 else "N/A")
-with col3:
     total_gross = filtered_df['Gross'].sum() if 'Gross' in filtered_df.columns else 0
     st.metric("💰 Total Gross", f"${total_gross:,.0f}" if total_gross > 0 else "N/A")
-with col4:
+with col3:
     genre_count = filtered_df['Genre'].nunique() if 'Genre' in filtered_df.columns else 0
     st.metric("🎭 Genres", genre_count)
 
@@ -127,6 +124,59 @@ if display_cols:
     st.dataframe(filtered_df[display_cols], use_container_width=True, height=300)
 else:
     st.info("No displayable columns found in the filtered data.")
+
+st.divider()
+
+# Movie Details Section - Individual Movie Pages
+st.subheader("🎬 Movie Details & Summaries")
+if len(filtered_df) > 0:
+    # Select a movie to view details
+    movie_titles = filtered_df['Series_Title'].tolist()
+    selected_movie = st.selectbox("📽️ Select a Movie to View Details", options=movie_titles, key="movie_selector")
+    
+    # Get the selected movie data
+    movie_data = filtered_df[filtered_df['Series_Title'] == selected_movie].iloc[0]
+    
+    # Display movie summary in a formatted card-like structure
+    st.write("---")
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        st.markdown(f"## {movie_data['Series_Title']}")
+        st.markdown(f"**Genre:** `{movie_data['Genre']}`")
+        st.markdown(f"**Release Year:** `{int(movie_data['Released_Year'])}`")
+    
+    with col2:
+        st.markdown(f"### ⭐ {movie_data['IMDB_Rating']}/10")
+        st.markdown(f"### 💰 ${movie_data['Gross']:,.0f}")
+    
+    # Additional movie statistics
+    st.write("---")
+    st.subheader("📊 Movie Summary")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric("⭐ IMDB Rating", f"{movie_data['IMDB_Rating']:.1f}/10")
+    with col2:
+        st.metric("📅 Year", int(movie_data['Released_Year']))
+    with col3:
+        st.metric("🎬 Genre", movie_data['Genre'])
+    
+    # Revenue and votes information
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.metric("💵 Box Office Gross", f"${movie_data['Gross']:,.0f}")
+    with col2:
+        st.metric("🗳️ Number of Votes", f"{int(movie_data['No_of_Votes']):,}" if 'No_of_Votes' in movie_data else "N/A")
+    
+    st.write("---")
+    st.markdown("**Quick Summary**")
+    st.info(f"'{selected_movie}' is a {movie_data['Genre']} film released in {int(movie_data['Released_Year'])} with an IMDB rating of {movie_data['IMDB_Rating']}/10. The film earned ${movie_data['Gross']:,.0f} at the box office.")
+    
+else:
+    st.warning("No movies to display. Adjust your filters to see movie details.")
 
 st.divider()
 
