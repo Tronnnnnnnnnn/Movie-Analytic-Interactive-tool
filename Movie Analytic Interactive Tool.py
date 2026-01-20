@@ -95,28 +95,117 @@ if theme == "🌙 Dark Mode":
     <style>
     /* Dark Mode Styling */
     :root {
-        --background-color: #1a1a1a;
-        --text-color: #e0e0e0;
-        --card-background: #2d2d2d;
-        --border-color: #404040;
+        --background-color: #1a1a1a !important;
+        --text-color: #e0e0e0 !important;
+        --card-background: #2d2d2d !important;
+        --border-color: #404040 !important;
     }
-    body {
-        background-color: #1a1a1a;
-        color: #e0e0e0;
+    
+    /* Main background */
+    .main, body, .stApp {
+        background-color: #1a1a1a !important;
+        color: #e0e0e0 !important;
     }
+    
+    /* Text elements */
+    h1, h2, h3, h4, h5, h6, p, span, div, label {
+        color: #e0e0e0 !important;
+    }
+    
+    /* Metrics */
     .stMetric {
-        background-color: #2d2d2d;
-        padding: 15px;
-        border-radius: 8px;
-        border: 1px solid #404040;
+        background-color: #2d2d2d !important;
+        padding: 15px !important;
+        border-radius: 8px !important;
+        border: 1px solid #404040 !important;
     }
-    .stDataFrame {
+    
+    .stMetric label {
+        color: #e0e0e0 !important;
+    }
+    
+    .metric-label, .metric-value {
+        color: #e0e0e0 !important;
+    }
+    
+    /* Dataframes */
+    .stDataFrame, .stDataFrameContainer {
+        background-color: #2d2d2d !important;
+    }
+    
+    [data-testid="stDataFrame"] {
+        background-color: #2d2d2d !important;
+    }
+    
+    /* Tabs */
+    [data-testid="stTabs"] {
+        background-color: #1a1a1a !important;
+    }
+    
+    [role="tablist"] {
+        background-color: #1a1a1a !important;
+    }
+    
+    .stTabs [role="tab"] {
+        color: #e0e0e0 !important;
+        background-color: #2d2d2d !important;
+    }
+    
+    .stTabs [role="tab"][aria-selected="true"] {
+        background-color: #404040 !important;
+        color: #e0e0e0 !important;
+    }
+    
+    /* Input elements */
+    .stTextInput input, .stTextInput textarea, .stSelectbox select {
+        background-color: #2d2d2d !important;
+        color: #e0e0e0 !important;
+        border: 1px solid #404040 !important;
+    }
+    
+    /* Slider */
+    .stSlider {
+        background-color: #1a1a1a !important;
+    }
+    
+    /* Expander */
+    .streamlit-expanderContent {
         background-color: #2d2d2d !important;
         color: #e0e0e0 !important;
     }
-    div[data-testid="stTabs"] {
-        background-color: #2d2d2d;
+    
+    /* Divider */
+    hr {
+        border-color: #404040 !important;
     }
+    
+    /* Info/Warning boxes */
+    .stInfo, .stWarning, .stError, .stSuccess {
+        background-color: #2d2d2d !important;
+        color: #e0e0e0 !important;
+        border: 1px solid #404040 !important;
+    }
+    
+    /* Sidebar */
+    .stSidebar {
+        background-color: #252525 !important;
+    }
+    
+    .stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar p, .stSidebar label {
+        color: #e0e0e0 !important;
+    }
+    
+    /* Button */
+    button, .stButton button {
+        background-color: #404040 !important;
+        color: #e0e0e0 !important;
+        border: 1px solid #505050 !important;
+    }
+    
+    button:hover, .stButton button:hover {
+        background-color: #505050 !important;
+    }
+    
     </style>
     """, unsafe_allow_html=True)
 else:
@@ -124,21 +213,117 @@ else:
     <style>
     /* Light Mode Styling */
     :root {
-        --background-color: #ffffff;
-        --text-color: #1a1a1a;
-        --card-background: #f5f5f5;
-        --border-color: #e0e0e0;
+        --background-color: #ffffff !important;
+        --text-color: #1a1a1a !important;
+        --card-background: #f5f5f5 !important;
+        --border-color: #e0e0e0 !important;
     }
-    body {
-        background-color: #ffffff;
-        color: #1a1a1a;
+    
+    /* Main background */
+    .main, body, .stApp {
+        background-color: #ffffff !important;
+        color: #1a1a1a !important;
     }
+    
+    /* Text elements */
+    h1, h2, h3, h4, h5, h6, p, span, div, label {
+        color: #1a1a1a !important;
+    }
+    
+    /* Metrics */
     .stMetric {
-        background-color: #f5f5f5;
-        padding: 15px;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
+        background-color: #f5f5f5 !important;
+        padding: 15px !important;
+        border-radius: 8px !important;
+        border: 1px solid #e0e0e0 !important;
     }
+    
+    .stMetric label {
+        color: #1a1a1a !important;
+    }
+    
+    .metric-label, .metric-value {
+        color: #1a1a1a !important;
+    }
+    
+    /* Dataframes */
+    .stDataFrame, .stDataFrameContainer {
+        background-color: #ffffff !important;
+    }
+    
+    [data-testid="stDataFrame"] {
+        background-color: #ffffff !important;
+    }
+    
+    /* Tabs */
+    [data-testid="stTabs"] {
+        background-color: #ffffff !important;
+    }
+    
+    [role="tablist"] {
+        background-color: #ffffff !important;
+    }
+    
+    .stTabs [role="tab"] {
+        color: #1a1a1a !important;
+        background-color: #f0f0f0 !important;
+    }
+    
+    .stTabs [role="tab"][aria-selected="true"] {
+        background-color: #e0e0e0 !important;
+        color: #1a1a1a !important;
+    }
+    
+    /* Input elements */
+    .stTextInput input, .stTextInput textarea, .stSelectbox select {
+        background-color: #f5f5f5 !important;
+        color: #1a1a1a !important;
+        border: 1px solid #e0e0e0 !important;
+    }
+    
+    /* Slider */
+    .stSlider {
+        background-color: #ffffff !important;
+    }
+    
+    /* Expander */
+    .streamlit-expanderContent {
+        background-color: #f5f5f5 !important;
+        color: #1a1a1a !important;
+    }
+    
+    /* Divider */
+    hr {
+        border-color: #e0e0e0 !important;
+    }
+    
+    /* Info/Warning boxes */
+    .stInfo, .stWarning, .stError, .stSuccess {
+        background-color: #f0f0f0 !important;
+        color: #1a1a1a !important;
+        border: 1px solid #e0e0e0 !important;
+    }
+    
+    /* Sidebar */
+    .stSidebar {
+        background-color: #f9f9f9 !important;
+    }
+    
+    .stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar p, .stSidebar label {
+        color: #1a1a1a !important;
+    }
+    
+    /* Button */
+    button, .stButton button {
+        background-color: #e0e0e0 !important;
+        color: #1a1a1a !important;
+        border: 1px solid #c0c0c0 !important;
+    }
+    
+    button:hover, .stButton button:hover {
+        background-color: #d0d0d0 !important;
+    }
+    
     </style>
     """, unsafe_allow_html=True)
 
