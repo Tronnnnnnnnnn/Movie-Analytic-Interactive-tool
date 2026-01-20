@@ -2,6 +2,8 @@
 
 A powerful and interactive Streamlit-based dashboard for analyzing and visualizing movie data with advanced filtering, real-time statistics, and comprehensive visualizations.
 
+**🌐 Live Demo**: [Access the Dashboard](http://localhost:8504)
+
 ---
 
 ## ✨ Features
@@ -89,7 +91,15 @@ pip install -r requirements.txt
 streamlit run "Movie Analytic Interactive Tool.py"
 ```
 
-The app automatically opens at `http://localhost:8501` in your default browser.
+The app automatically opens at `http://localhost:8504` in your default browser.
+
+**Direct Access**: Once running, open [http://localhost:8504](http://localhost:8504) to view the dashboard.
+
+### Accessing the Dashboard
+
+- **Local URL**: `http://localhost:8504`
+- **Network URL**: `http://<your-machine-ip>:8504` (for other devices on network)
+- The app runs in watch mode, so changes auto-reload
 
 ---
 
@@ -231,37 +241,48 @@ Gross → revenue
 
 ## 🌐 Deployment Options
 
-### Option 1: Streamlit Cloud (Recommended - Free)
+### Option 1: Streamlit Cloud (Recommended - Free) for Public Access
 
 1. **Push to GitHub** (already done ✅)
 2. **Visit** [share.streamlit.io](https://share.streamlit.io)
 3. **Sign in** with GitHub
 4. **Click** "New app"
 5. **Select**:
-   - Repository: `Movie-Analytic-Interactive-tool`
+   - Repository: `Tronnnnnnnnnn/Movie-Analytic-Interactive-tool`
    - Branch: `main`
    - File: `Movie Analytic Interactive Tool.py`
 6. **Click** "Deploy"
 7. **Wait** 2-3 minutes for deployment
-8. **Access** via unique Streamlit Cloud URL
+8. **Share** the Streamlit Cloud URL with others
 
-### Option 2: Local Deployment
+### Option 2: Local Deployment (Current Setup)
+
+**Current Status**: ✅ App is running locally
+
+**Access the Dashboard**:
+- **Local URL**: [http://localhost:8504](http://localhost:8504)
+- **Network URL**: `http://<your-machine-ip>:8504` (for LAN access)
 
 **Run locally with custom settings:**
 ```bash
 streamlit run "Movie Analytic Interactive Tool.py" \
-  --server.port 8501 \
-  --server.address localhost
+  --server.port 8504 \
+  --server.address 0.0.0.0
 ```
 
-**Access**: `http://localhost:8501`
+**Features when running locally**:
+- Real-time code changes auto-reload
+- Full performance with no latency
+- Access via local network from other devices
+- No internet required
 
 ### Option 3: Docker Containerization
 
 (Optional for advanced users)
 - Create Dockerfile with Python base image
 - Install dependencies from requirements.txt
-- Expose port 8501
+- Expose port 8504
+- Build and run container
 
 ---
 
