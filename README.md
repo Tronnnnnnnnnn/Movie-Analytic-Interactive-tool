@@ -2,7 +2,7 @@
 
 A powerful and interactive Streamlit-based dashboard for analyzing and visualizing movie data with advanced filtering, real-time statistics, and comprehensive visualizations.
 
-**🌐Access the Dashboard**: Movie Analyst!(http://localhost:8504)
+**🌐Access the Dashboard**: [Movie Analyst!](https://movieanalyst.streamlit.app/)
 
 ---
 
