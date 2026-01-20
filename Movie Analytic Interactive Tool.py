@@ -23,7 +23,16 @@ if plotting_available:
 # Custom page config for better UI
 st.set_page_config(page_title="Movie Analyst", page_icon="🎬", layout="wide")
 
-st.title("Welcome to Movie Analyst!")
+st.markdown("""
+<div style='text-align: center; padding: 20px;'>
+    <h1 style='font-family: "Arial Black", sans-serif; font-size: 3.2em; font-weight: 900; color: #FF6B6B; text-shadow: 2px 2px 8px rgba(0,0,0,0.15); letter-spacing: 1px;'>
+        🎬 Welcome to Movie Analyst!
+    </h1>
+    <p style='font-family: "Georgia", serif; font-size: 1.3em; color: #555; font-style: italic; margin-top: -15px; font-weight: 500; letter-spacing: 0.5px;'>
+        Because movies are art — but their numbers tell stories too.
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 # Load dataset
 @st.cache_data
